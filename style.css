@@ -291,7 +291,9 @@ body {
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(182,137,91,0.15);
   transition: 
-  background-color : var(--bg),
+    background 0.2s,
+    color 0.2s,
+    border 0.2s,
     transform 0.15s,
     box-shadow 0.2s;
 }
