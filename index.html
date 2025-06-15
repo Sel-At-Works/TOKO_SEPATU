@@ -74,37 +74,61 @@
 
     <div class="row">
         <div class="produk-card">
-            <img src="img/sepatu-kulit.jpg" alt="Sepatu1" class="produk-card-img">
+            <img src="img/foto1.jpg" alt="Sepatu1" class="produk-card-img">
             <h3 class="produk-card-title">-Sepatu Kulit-</h3>
             <p class="produk-card-price">IDR 200K</p>
-  <a href="detail.php?id_produk=01" class="detail">Detail Produk</a>
+  <a href="detail.php?id_produk=03" class="detail">Detail Produk</a>
         </div>
         <div class="produk-card">
-            <img src="img/sepatu-kulit.jpg" alt="Sepatu1" class="produk-card-img">
+            <img src="img/foto1.jpg" alt="Sepatu1" class="produk-card-img">
             <h3 class="produk-card-title">-Sepatu Kulit-</h3>
             <p class="produk-card-price">IDR 200K</p>
       <a href="detail.php?id_produk=02" class="detail">Detail Produk</a>
         </div>
         <div class="produk-card">
-            <img src="img/sepatu-kulit.jpg" alt="Sepatu1" class="produk-card-img">
+            <img src="img/foto2.jpg" alt="Sepatu1" class="produk-card-img">
             <h3 class="produk-card-title">-Sepatu Kulit-</h3>
             <p class="produk-card-price">IDR 200K</p>
       <a href="detail.php?id_produk=01" class="detail">Detail Produk</a>
         </div>
         <div class="produk-card">
-            <img src="img/sepatu-kulit.jpg" alt="Sepatu1" class="produk-card-img">
+            <img src="img/foto2.jpg" alt="Sepatu1" class="produk-card-img">
             <h3 class="produk-card-title">-Sepatu Kulit-</h3>
             <p class="produk-card-price">IDR 200K</p>
       <a href="detail.php?id_produk=01" class="detail">Detail Produk</a>
         </div>
         <div class="produk-card">
-            <img src="img/sepatu-kulit.jpg" alt="Sepatu1" class="produk-card-img">
+            <img src="img/foto1.jpg" alt="Sepatu1" class="produk-card-img">
             <h3 class="produk-card-title">-Sepatu Kulit-</h3>
             <p class="produk-card-price">IDR 200K</p>
         <a href="detail.php?id_produk=01" class="detail">Detail Produk</a>
         </div>
         <div class="produk-card">
-            <img src="img/sepatu-kulit.jpg" alt="Sepatu1" class="produk-card-img">
+            <img src="img/foto1.jpg" alt="Sepatu1" class="produk-card-img">
+            <h3 class="produk-card-title">-Sepatu Kulit-</h3>
+            <p class="produk-card-price">IDR 200K</p>
+ <a href="detail.php?id_produk=01" class="detail">Detail Produk</a>  
+        </div>
+           <div class="produk-card">
+            <img src="img/foto2.jpg" alt="Sepatu1" class="produk-card-img">
+            <h3 class="produk-card-title">-Sepatu Kulit-</h3>
+            <p class="produk-card-price">IDR 200K</p>
+ <a href="detail.php?id_produk=01" class="detail">Detail Produk</a>  
+        </div>
+           <div class="produk-card">
+            <img src="img/foto2.jpg" alt="Sepatu1" class="produk-card-img">
+            <h3 class="produk-card-title">-Sepatu Kulit-</h3>
+            <p class="produk-card-price">IDR 200K</p>
+ <a href="detail.php?id_produk=01" class="detail">Detail Produk</a>  
+        </div>
+           <div class="produk-card">
+            <img src="img/foto2.jpg" alt="Sepatu1" class="produk-card-img">
+            <h3 class="produk-card-title">-Sepatu Kulit-</h3>
+            <p class="produk-card-price">IDR 200K</p>
+ <a href="detail.php?id_produk=01" class="detail">Detail Produk</a>  
+        </div>
+           <div class="produk-card">
+            <img src="img/foto1.jpg" alt="Sepatu1" class="produk-card-img">
             <h3 class="produk-card-title">-Sepatu Kulit-</h3>
             <p class="produk-card-price">IDR 200K</p>
  <a href="detail.php?id_produk=01" class="detail">Detail Produk</a>  
@@ -119,18 +143,22 @@
 
     <div class="row">
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.401662208277!2d106.93480477475043!3d-6.210637293777245!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698b608c9360fd%3A0x4b5d5658d4a1ecd2!2sSMP%20Assyairiyah%20Attahiriyah!5e0!3m2!1sid!2sid!4v1748958048282!5m2!1sid!2sid" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="map"></iframe>
-        <form action="">
+        <form action="proses_kontak.php" method="POST">
         <div class="input-grup">
             <i data-feather="user"></i>
-            <input type="text" placeholder="Nama Anda" required>
+            <input type="text" name="nama_pengguna" placeholder="Nama Anda" required>
             </div>
         <div class="input-grup">
             <i data-feather="mail"></i>
-            <input type="text" placeholder="Email Anda" required>
+            <input type="text" name="email_pengguna" placeholder="Email Anda" required>
             </div>
         <div class="input-grup">
             <i data-feather="phone"></i>
-            <input type="text" placeholder="Nomor Handphone" required>
+            <input type="text"  name="nomor_pengguna"  placeholder="Nomor Handphone" required>
+            </div>
+             <div class="input-grup">
+            <i data-feather="edit"></i>
+            <input type="text" name="deskripsi" placeholder="pesan" required>
             </div>
             <button type="submit" class="btn">Kirim Pesan</button>
         </form>

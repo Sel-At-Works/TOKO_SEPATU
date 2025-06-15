@@ -169,6 +169,13 @@ body {
   display: flex;
 }
 
+.row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 kolom di desktop */
+  gap: 24px;
+  justify-items: center;
+}
+
 .about .row .about-img {
   flex: 1 1 45rem;
 }
@@ -208,6 +215,16 @@ body {
   line-height: 1.6;
 }
 
+.produk-card-img {
+  width: 220px;         /* atau ukuran yang kamu inginkan */
+  height: 180px;        /* atau ukuran yang kamu inginkan */
+  object-fit: cover;    /* agar gambar tidak gepeng dan proporsional */
+  display: block;
+  margin: 0 auto;
+  border-radius: 12px;  /* opsional, untuk sudut membulat */
+  margin: 16px; /* atau margin-bottom: 24px; jika ingin jarak ke bawah saja */
+}
+
 .produk .row {
   display: flex;
   flex-wrap: wrap;
@@ -222,7 +239,7 @@ body {
 }
 
 .produk .row .produk-card img {
-  border-radius: 50%; /*bisa rubah sesuai kebutuhan*/
+  border-radius: 20%; /*bisa rubah sesuai kebutuhan*/
   width: 80%;
 }
 
@@ -525,5 +542,17 @@ footer .credit a {
   .about-img img {
     max-width: 120px;
     height: auto;
+  }
+}
+
+@media (max-width: 900px) {
+  .row {
+    grid-template-columns: repeat(2, 1fr); /* 2 kolom di tablet */
+  }
+}
+
+@media (max-width: 600px) {
+  .row {
+    grid-template-columns: 1fr; /* 1 kolom di HP */
   }
 }

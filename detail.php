@@ -1,4 +1,3 @@
-
 <?php
 // Koneksi ke database
 $koneksi = mysqli_connect("localhost", "root", "", "toko_sepatu");
@@ -26,22 +25,48 @@ $data = mysqli_fetch_assoc($result);
         <img src="img/<?php echo htmlspecialchars($data['gambar']); ?>" alt="<?php echo htmlspecialchars($data['nama_produk']); ?>" class="detail-img">
         <div class="detail-info">
           <h1 class="detail-title"><?php echo htmlspecialchars($data['nama_produk']); ?></h1>
-          <p class="detail-price">Rp.<?php echo number_format($data['harga'],0,',','.'); ?></p>
-          <p class="detail-desc"><?php echo htmlspecialchars($data['deskripsi']); ?></p>
-          <a href="index.html" class="back-btn">Kembali ke Produk</a>
+          <?php if(!empty($data['size'])): ?>
+            <div class="detail-size"><span class="label">Ukuran:</span> <?php echo htmlspecialchars($data['size']); ?></div>
+          <?php endif; ?>
+          <div class="detail-divider" style="width:100%;height:2px;background:linear-gradient(to right,#ffd700,#fff);margin:18px 0;opacity:0.25;border-radius:2px;"></div>
+          <p class="detail-price"><span class="label">Harga:</span> Rp.<?php echo number_format($data['harga'],0,',','.'); ?></p>
+          <div class="detail-divider" style="width:100%;height:2px;background:linear-gradient(to right,#ffd700,#fff);margin:18px 0;opacity:0.25;border-radius:2px;"></div>
+          <p class="detail-desc" id="deskripsi">
+            <span class="label">Deskripsi:</span><br>
+            <?php echo htmlspecialchars($data['deskripsi']); ?>
+          </p>
+          <button class="lihat-lainnya" id="lihatLainnyaBtn" onclick="toggleDeskripsi()">Lihat lainnya</button>
+          <div style="display: flex; gap: 12px; margin-top: 8px;">
+            <a href="index.html" class="back-btn">Kembali ke Produk</a>
+            <a href="https://wa.me/6281219652063?text=Halo%20saya%20ingin%20memesan%20produk%20<?php echo urlencode($data['nama_produk']); ?>" class="order-btn" target="_blank">Pesan Sekarang</a>
+          </div>
         </div>
       <?php else: ?>
-        <p>Produk tidak ditemukan.</p>
-        <a href="index.html" class="back-btn">Kembali ke Produk</a>
+        <div class="detail-info">
+          <p>Produk tidak ditemukan.</p>
+          <a href="index.html" class="back-btn">Kembali ke Produk</a>
+        </div>
       <?php endif; ?>
     </div>
   </div>
+
+  <script>
+    function toggleDeskripsi() {
+      const deskripsi = document.getElementById('deskripsi');
+      const btnLihatLainnya = document.getElementById('lihatLainnyaBtn');
+      if (deskripsi.style.maxHeight) {
+        deskripsi.style.maxHeight = null;
+        btnLihatLainnya.innerText = 'Lihat lainnya';
+      } else {
+        deskripsi.style.maxHeight = deskripsi.scrollHeight + 'px';
+        btnLihatLainnya.innerText = 'Tampilkan lebih sedikit';
+      } 
+    }
+  </script>
 </body>
 </html>
 
 <style>
-  /* detail.css */
-
 body {
   margin: 0;
   padding: 0;
@@ -97,30 +122,63 @@ body {
   flex-direction: column;
   justify-content: center;
   transition: opacity 0.6s ease;
+  background: rgba(255,255,255,0.04);
+  border-radius: 0 20px 20px 0;
+  box-shadow: 0 0 0 1.5px rgba(255,215,0,0.08);
 }
 
 .detail-title {
-  font-size: 2.6rem;
+  font-size: 2.1rem;
   font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 20px;
-  text-transform: uppercase;
+  color: #ffd700;
+  margin-bottom: 12px;
   letter-spacing: 1px;
-  transition: color 0.5s ease;
+  text-transform: uppercase;
+}
+
+.detail-size {
+  font-size: 1.1rem;
+  color: #fff;
+  margin-bottom: 18px;
+  font-weight: 500;
 }
 
 .detail-price {
-  font-size: 2rem;
+  font-size: 1.3rem;
   font-weight: 600;
-  color: #ffffff;
-  margin-bottom: 25px;
+  color: #ffd700;
+  margin: 18px 0;
 }
 
 .detail-desc {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  color: #e0e0e0;
-  margin-bottom: 35px;
+  max-height: 80px;         /* tinggi maksimal sebelum dipotong */
+  overflow: hidden;
+  position: relative;
+  transition: max-height 0.3s;
+}
+
+.detail-desc.expanded {
+  max-height: 1000px;       /* cukup besar agar seluruh teks tampil */
+}
+
+.lihat-lainnya {
+  display: inline-block;
+  margin: 16px 0 24px 0; /* atas 16px, bawah 24px */
+  background: none;
+  border: none;
+  color: #ffd700;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1rem;
+  text-decoration: underline;
+  margin-left: 0; /* pastikan tidak ada auto */
+  align-self: flex-start; /* jika parent flex, ini akan ratakan ke kiri */
+}
+
+.label {
+  color: #ffd700;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 .back-btn {
@@ -144,7 +202,25 @@ body {
   transform: translateY(-3px);
 }
 
-/* Smooth fade-in animation */
+.order-btn {
+  display: inline-block;
+  padding: 14px 28px;
+  background: linear-gradient(to right, #25d366, #128c7e);
+  color: #fff;
+  font-weight: bold;
+  border-radius: 40px;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.18);
+}
+
+.order-btn:hover {
+  background: linear-gradient(to right, #128c7e, #25d366);
+  color: #fff;
+  transform: translateY(-2px) scale(1.04);
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -156,4 +232,13 @@ body {
   }
 }
 
+.produk-card-img {
+  width: 100%;
+  height: auto;         /* biarkan tinggi mengikuti proporsi asli gambar */
+  object-fit: contain;  /* gambar tampil penuh, tidak terpotong */
+  display: block;
+  margin: 0 auto;
+  background: #fff;     /* opsional, agar area kosong tampak jelas */
+  border-radius: 12px;  /* opsional */
+}
 </style>
