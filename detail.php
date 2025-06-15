@@ -38,7 +38,7 @@ $data = mysqli_fetch_assoc($result);
           <button class="lihat-lainnya" id="lihatLainnyaBtn" onclick="toggleDeskripsi()">Lihat lainnya</button>
           <div style="display: flex; gap: 12px; margin-top: 8px;">
             <a href="index.html" class="back-btn">Kembali ke Produk</a>
-            <a href="https://wa.me/6281219652063?text=Halo%20saya%20ingin%20memesan%20produk%20<?php echo urlencode($data['nama_produk']); ?>" class="order-btn" target="_blank">Pesan Sekarang</a>
+            <a href="https://wa.me/6281219657898?text=Halo%20saya%20ingin%20memesan%20produk%20<?php echo urlencode($data['nama_produk']); ?>" class="order-btn" target="_blank">Pesan Sekarang</a>
           </div>
         </div>
       <?php else: ?>
