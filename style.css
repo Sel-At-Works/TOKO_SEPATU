@@ -17,9 +17,10 @@ html{
 }
 
 body {
-  font-family: "Roboto", sans-serif;
-  background-color: var(--bg);
-  color: #fff;
+    font-family: 'Roboto', sans-serif;
+    background: #fff;
+    margin: 0;
+    color: #111;
 }
 
 /* navbar */
@@ -213,17 +214,9 @@ body {
   margin: auto;
   font-weight: 100;
   line-height: 1.6;
+  font-weight: bold !important;
 }
 
-.produk-card-img {
-  width: 220px;         /* atau ukuran yang kamu inginkan */
-  height: 180px;        /* atau ukuran yang kamu inginkan */
-  object-fit: cover;    /* agar gambar tidak gepeng dan proporsional */
-  display: block;
-  margin: 0 auto;
-  border-radius: 12px;  /* opsional, untuk sudut membulat */
-  margin: 16px; /* atau margin-bottom: 24px; jika ingin jarak ke bawah saja */
-}
 
 .produk .row {
   display: flex;
@@ -239,12 +232,93 @@ body {
 }
 
 .produk .row .produk-card img {
-  border-radius: 20%; /*bisa rubah sesuai kebutuhan*/
+  border-radius: 20%;
   width: 80%;
+} 
+
+/* --- Perbaikan Tampilan Produk Kami --- */
+.produk {
+  background: #fff;
+  padding: 8rem 7% 3rem;
 }
 
-.produk .row .produk-card .produk-card-title {
-  margin: 1.5rem auto 0.5rem;
+.produk .row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.produk-card {
+  background: #fffbe6;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(182,137,91,0.13);
+  padding: 24px 18px 18px 18px;
+  width: 250px;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.produk-card:hover {
+  box-shadow: 0 8px 32px rgba(182,137,91,0.18);
+  transform: translateY(-4px) scale(1.03);
+}
+
+.produk-card-img {
+  width: 100%;              /* Isi lebar card */
+  height: auto;             /* Ikuti rasio asli gambar */
+  border-radius: 12px;
+  margin: 0 auto 16px auto;
+  box-shadow: 0 2px 8px rgba(182,137,91,0.08);
+  display: block;
+  max-width: 400px;         /* Batasi ukuran maksimum biar nggak terlalu besar */
+}
+
+
+
+
+
+.produk-card-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #b6895b;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.produk-card-price {
+  font-size: 1.05rem;
+  color: #222;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.detail {
+  display: inline-block;
+  padding: 0.6rem 1.5rem;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-top: 0.5rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(182,137,91,0.10);
+  transition: background 0.2s, color 0.2s, border 0.2s, transform 0.15s, box-shadow 0.2s;
+  border: 1.5px solid transparent;
+}
+
+.detail:hover, .detail:focus {
+  background: #fff;
+  color: var(--primary);
+  border: 1.5px solid var(--primary);
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 6px 24px rgba(182,137,91,0.18);
 }
 
 /* contact Session */
@@ -555,4 +629,260 @@ footer .credit a {
   .row {
     grid-template-columns: 1fr; /* 1 kolom di HP */
   }
+}
+
+.btn-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 22px;
+  background: linear-gradient(90deg, #ffd700 0%, #ffc107 100%);
+  color: #222;
+  font-weight: 600;
+  border-radius: 28px;
+  text-decoration: none;
+  font-size: 1rem;
+  box-shadow: 0 2px 10px rgba(182,137,91,0.10);
+  border: none;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
+  letter-spacing: 0.5px;
+  margin-left: 12px;
+}
+.btn-login i {
+  width: 20px;
+  height: 20px;
+  color: #b6895b;
+  transition: color 0.2s;
+}
+.btn-login:hover {
+  background: linear-gradient(90deg, #fffbe6 0%, #ffd700 100%);
+  color: #b6895b;
+  box-shadow: 0 6px 18px rgba(182,137,91,0.18);
+  transform: translateY(-2px) scale(1.04);
+}
+.btn-login:hover i {
+  color: #ffd700;
+}
+
+.container {
+    max-width: 700px;
+    margin: 32px auto;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(182,137,91,0.10);
+    padding: 24px 12px;
+}
+h2 {
+    color: #b6895b;
+    text-align: center;
+    margin-bottom: 22px;
+    font-size: 1.4rem;
+}
+.success, .error {
+    font-size: 0.98rem;
+}
+.btn-tambah {
+    font-size: 1rem;
+    padding: 8px 16px;
+}
+.form-produk {
+    padding: 16px 8px;
+}
+label {
+    font-size: 0.98rem;
+    color: #111;
+}
+input[type="text"], input[type="number"], textarea, input[type="file"] {
+    font-size: 0.97rem;
+    padding: 7px 10px;
+    margin-bottom: 14px;
+    color: #111;
+}
+button, .btn-hapus, .btn-edit {
+    font-size: 0.97rem;
+    padding: 6px 12px;
+    color: #111;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 0.96rem;
+    color: #111;
+}
+th, td {
+    border: 1px solid #ffd700;
+    padding: 6px 4px;
+    text-align: center;
+    color: #111;
+}
+th {
+    background: #fffbe6;
+    color: #b6895b;
+    font-size: 0.98rem;
+}
+img {
+    max-width: 45px;
+    border-radius: 4px;
+}
+.btn-hapus, .btn-edit {
+    padding: 5px 10px;
+    font-size: 0.93rem;
+}
+.aksi-btns {
+    gap: 4px;
+}
+.close-form {
+    width: 22px;
+    height: 22px;
+    font-size: 1rem;
+}
+/* --- Admin Produk Table & Form --- */
+.admin-produk-container {
+  max-width: 800px;
+  margin: 40px auto 32px auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(182,137,91,0.13);
+  padding: 32px 24px 28px 24px;
+}
+
+.admin-produk-title {
+  color: #b6895b;
+  text-align: center;
+  margin-bottom: 28px;
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.admin-produk-form {
+  background: #fffbe6;
+  border-radius: 12px;
+  padding: 20px 18px 12px 18px;
+  margin-bottom: 32px;
+  box-shadow: 0 2px 8px rgba(182,137,91,0.08);
+}
+
+.admin-produk-form label {
+  display: block;
+  margin-bottom: 6px;
+  color: #444;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.admin-produk-form input[type="text"],
+.admin-produk-form input[type="number"],
+.admin-produk-form textarea,
+.admin-produk-form input[type="file"] {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  border: 1.5px solid #ffd700;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #f9f9f9;
+  color: #111;
+  transition: border 0.2s;
+}
+
+.admin-produk-form input:focus,
+.admin-produk-form textarea:focus {
+  border-color: #b6895b;
+  outline: none;
+}
+
+.admin-produk-form button {
+  background: linear-gradient(90deg, #ffd700 0%, #ffc107 100%);
+  color: #222;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.08rem;
+  cursor: pointer;
+  padding: 10px 22px;
+  transition: background 0.2s, color 0.2s;
+  margin-top: 8px;
+}
+
+.admin-produk-form button:hover {
+  background: #b6895b;
+  color: #fff;
+}
+
+.admin-produk-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 0.97rem;
+  color: #111;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(182,137,91,0.08);
+}
+
+.admin-produk-table th, .admin-produk-table td {
+  border: 1px solid #ffd700;
+  padding: 8px 6px;
+  text-align: center;
+  color: #111;
+}
+
+.admin-produk-table th {
+  background: #fffbe6;
+  color: #b6895b;
+  font-size: 1.03rem;
+  font-weight: 600;
+}
+
+.admin-produk-table img {
+  max-width: 50px;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(182,137,91,0.10);
+}
+
+.admin-produk-table .aksi-btns {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-edit, .btn-hapus {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.97rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-edit {
+  background: #ffd700;
+  color: #b6895b;
+}
+
+.btn-edit:hover {
+  background: #b6895b;
+  color: #fff;
+}
+
+.btn-hapus {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.btn-hapus:hover {
+  background: #fff;
+  color: #e74c3c;
+  border: 1.5px solid #e74c3c;
+}
+
+@media (max-width: 700px) {
+    .container { padding: 10px 2vw; }
+    table, th, td { font-size: 0.92rem; }
+    .admin-produk-container { padding: 12px 2vw; }
+    .admin-produk-table, .admin-produk-table th, .admin-produk-table td { font-size: 0.93rem; }
 }
