@@ -53,7 +53,7 @@ $produk = mysqli_query($koneksi, "SELECT * FROM toko_sepatu ORDER BY id_produk D
         </div>
         <div class="nav-extra">
             <a href="#" id="search"><i data-feather="search"></i></a>
-            <a href="#" id="shopping-cart"><i data-feather="shopping-cart"></i></a>
+            <a href="keranjang.php" id="shopping-cart"><i data-feather="shopping-cart"></i></a>
             <a href="#" id="menu"><i data-feather="menu"></i></a>
         </div>
         <a href="login.php" class="btn-login">

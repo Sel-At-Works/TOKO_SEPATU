@@ -19,6 +19,13 @@ $data = mysqli_fetch_assoc($result);
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+<!-- Tombol kembali di samping div detail-container -->
+<!-- Tombol kembali ke produk: panah + tulisan "Kembali" warna putih -->
+<div class="page-container">
+  <a href="index.php#produk" style="max-width: 120px; text-align: center; padding: 14px 0; font-size: 2rem; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+  <span style="font-size:2rem; color:#000000;">&#8592;</span>
+    <span style="font-size:1.1rem; color:#000000; font-weight:bold;">Kembali</span>
+  </a>
   <div class="detail-container">
     <div class="detail-card">
       <?php if($data): ?>
@@ -37,7 +44,10 @@ $data = mysqli_fetch_assoc($result);
           </p>
           <button class="lihat-lainnya" id="lihatLainnyaBtn" onclick="toggleDeskripsi()">Lihat lainnya</button>
           <div style="display: flex; gap: 12px; margin-top: 8px;">
-            <a href="index.html" class="back-btn">Kembali ke Produk</a>
+           <form action="keranjang.php" method="POST" class="form-keranjang">
+            <input type="hidden" name="id_produk" value="<?php echo $data['id_produk']; ?>">
+            <button type="submit" class="back-btn">Masukan Keranjang</button>
+          </form>
             <a href="https://wa.me/6281219657898?text=Halo%20saya%20ingin%20memesan%20produk%20<?php echo urlencode($data['nama_produk']); ?>" class="order-btn" target="_blank">Pesan Sekarang</a>
           </div>
         </div>
@@ -66,179 +76,160 @@ $data = mysqli_fetch_assoc($result);
 </body>
 </html>
 
+
 <style>
 body {
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;
-  background: linear-gradient(to right, #1c1c1c, #2e2e2e);
-  color: #ffffff;
-  transition: background 0.5s ease-in-out;
+  background-color: #f9f9f9;
+  color: #222;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  max-width: 960px;
+  margin: 0 auto;
 }
 
 .detail-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 20px;
-  min-height: 100vh;
-  animation: fadeIn 1.2s ease-in-out;
+  width: 100%;
 }
 
 .detail-card {
   display: flex;
   flex-direction: row;
-  background: #121212;
-  border-radius: 20px;
-  box-shadow: 0 15px 40px rgba(255, 215, 0, 0.15);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
   overflow: hidden;
-  max-width: 1000px;
   width: 100%;
-  transition: transform 0.6s ease, box-shadow 0.6s ease;
-  border: 1px solid rgba(255, 215, 0, 0.08);
+  transition: 0.3s ease;
 }
 
 .detail-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 50px rgba(255, 215, 0, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
 .detail-img {
   width: 50%;
   object-fit: cover;
   height: auto;
-  filter: brightness(0.95);
-  transition: filter 0.6s ease;
-}
-
-.detail-img:hover {
-  filter: brightness(1);
 }
 
 .detail-info {
-  padding: 40px;
+  padding: 24px;
   width: 50%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  transition: opacity 0.6s ease;
-  background: rgba(255,255,255,0.04);
-  border-radius: 0 20px 20px 0;
-  box-shadow: 0 0 0 1.5px rgba(255,215,0,0.08);
+  justify-content: flex-start;
+  background-color: #ffffff;
 }
 
 .detail-title {
-  font-size: 2.1rem;
+  font-size: 1.8rem;
   font-weight: 700;
-  color: #ffd700;
   margin-bottom: 12px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  color: #333;
 }
 
-.detail-size {
-  font-size: 1.1rem;
-  color: #fff;
-  margin-bottom: 18px;
-  font-weight: 500;
-}
-
+.detail-size,
 .detail-price {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #ffd700;
-  margin: 18px 0;
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+.detail-divider {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 16px 0;
 }
 
 .detail-desc {
-  max-height: 80px;         /* tinggi maksimal sebelum dipotong */
+  font-size: 0.95rem;
+  color: #444;
+  max-height: 80px;
   overflow: hidden;
-  position: relative;
-  transition: max-height 0.3s;
+  transition: max-height 0.3s ease;
 }
 
 .detail-desc.expanded {
-  max-height: 1000px;       /* cukup besar agar seluruh teks tampil */
+  max-height: 1000px;
 }
 
 .lihat-lainnya {
-  display: inline-block;
-  margin: 16px 0 24px 0; /* atas 16px, bawah 24px */
+  margin: 12px 0;
   background: none;
   border: none;
-  color: #ffd700;
-  font-weight: bold;
+  color: #007bff;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.95rem;
   text-decoration: underline;
-  margin-left: 0; /* pastikan tidak ada auto */
-  align-self: flex-start; /* jika parent flex, ini akan ratakan ke kiri */
+  align-self: flex-start;
 }
 
 .label {
-  color: #ffd700;
   font-weight: 600;
-  letter-spacing: 0.5px;
+  color: #555;
+}
+
+.back-btn,
+.order-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  margin-top: 12px;
 }
 
 .back-btn {
-  display: inline-block;
-  padding: 14px 28px;
-  background: linear-gradient(to right, #ffd700, #ffc107);
-  color: #121212;
-  font-weight: bold;
-  border-radius: 40px;
-  text-decoration: none;
-  text-align: center;
-  transition: all 0.4s ease;
-  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
-  max-width: 250px;
+  background: #f1f1f1;
+  color: #333;
+  border: 1px solid #ccc;
 }
 
 .back-btn:hover {
-  background: linear-gradient(to right, #e6c200, #e0ac00);
-  color: #ffffff;
-  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
-  transform: translateY(-3px);
+  background: #e2e2e2;
 }
 
 .order-btn {
-  display: inline-block;
-  padding: 14px 28px;
-  background: linear-gradient(to right, #25d366, #128c7e);
+  background: #25d366;
   color: #fff;
-  font-weight: bold;
-  border-radius: 40px;
-  text-decoration: none;
-  text-align: center;
-  transition: all 0.3s;
-  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.18);
+  margin-left: 10px;
 }
+
+.form-keranjang {
+  margin: 0;
+    display: inline-block;
+}
+
 
 .order-btn:hover {
-  background: linear-gradient(to right, #128c7e, #25d366);
-  color: #fff;
-  transform: translateY(-2px) scale(1.04);
+  background: #1ebe5d;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Tombol Kembali di atas */
+.page-container > a {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px;
+  text-decoration: none;
+  color: #007bff;
+  font-size: 1rem;
 }
 
-.produk-card-img {
-  width: 100%;
-  height: auto;         /* biarkan tinggi mengikuti proporsi asli gambar */
-  object-fit: contain;  /* gambar tampil penuh, tidak terpotong */
-  display: block;
-  margin: 0 auto;
-  background: #fff;     /* opsional, agar area kosong tampak jelas */
-  border-radius: 12px;  /* opsional */
+.page-container > a:hover {
+  text-decoration: underline;
 }
 </style>
