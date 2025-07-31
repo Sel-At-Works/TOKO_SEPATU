@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['login'] = true;
             $_SESSION['role'] = 'member';
             $_SESSION['username'] = $row_member['username'];
-            header("Location: index.html");
+            header("Location: index.php");
             exit;
         }
     }
@@ -164,7 +164,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
   <div class="login-container">
-    <div class="login-title">Login Admin</div>
+    <div class="login-title">Login</div>
     <form class="login-form" method="post">
       <?php if($pesan) echo $pesan; ?>
       <label for="username">Username</label>
