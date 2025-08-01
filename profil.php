@@ -23,16 +23,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
         $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
         $newName = "foto_" . time() . "." . $ext;
+    $email = $_POST['email'];
+    $profile = $_POST['profile'];
+
+    // ✅ Tambahkan di sini
+    if (!is_dir('uploads')) {
+        mkdir('uploads', 0777, true);
+    }
+
+    // Upload foto jika ada
+    $foto = $user['foto']; // default tetap yang lama
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
+        $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
+        $newName = "foto_" . time() . "." . $ext;
+        move_uploaded_file($_FILES['foto']['tmp_name'], "uploads/" . $newName);
+        $foto = $newName;
+    }
+
         move_uploaded_file($_FILES['foto']['tmp_name'], "uploads/" . $newName);
         $foto = $newName;
     }
 
     // Update data ke database
     $update = mysqli_query($koneksi, "UPDATE member SET email = '$email', profile = '$profile', foto = '$foto' WHERE username = '$username'");
-    if ($update) {
-        header("Location: profil.php?success=1");
-        exit;
-    }
+if ($update) {
+    $_SESSION['foto'] = $foto; // <--- tambahkan baris ini untuk update session foto
+    header("Location: profil.php?success=1");
+    exit;
+}
+
 }
 ?>
 
@@ -171,4 +190,3 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         text-decoration: underline;
     }
 </style>
-

@@ -1,8 +1,32 @@
-<?php session_start(); ?>
 <?php
-$koneksi = mysqli_connect("localhost", "root", "", "toko_sepatu");
-$produk = mysqli_query($koneksi, "SELECT * FROM toko_sepatu ORDER BY id_produk DESC");
+session_start();
+if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'member') {
+    header("Location: login.php");
+    exit();
+}
 ?>
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'member') {
+    header("Location: login.php");
+    exit();
+}
+
+// Koneksi dan query produk
+$koneksi = mysqli_connect("localhost", "root", "", "toko_sepatu");
+if (!$koneksi) {
+    die("Koneksi gagal: " . mysqli_connect_error());
+}
+
+$produk = mysqli_query($koneksi, "SELECT * FROM toko_sepatu");
+if (!$produk) {
+    die("Query produk gagal: " . mysqli_error($koneksi));
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -111,27 +135,49 @@ $produk = mysqli_query($koneksi, "SELECT * FROM toko_sepatu ORDER BY id_produk D
         </div>
         <div class="auth-buttons">
             <?php if (isset($_SESSION['login']) && $_SESSION['login'] === true): ?>
-                <div class="auth-buttons">
-                    <a href="profil.php" class="login-btn">
-                        <i data-feather="user"></i>
-                        <span><?= htmlspecialchars($_SESSION['username']) ?></span>
-                    </a>
-                    <a href="logout.php" class="logout-btn" onclick="return confirmLogout()">Logout</a>
-
-                    <script>
-                        function confirmLogout() {
-                            return confirm("Apakah Anda yakin ingin logout?");
-                        }
-                    </script>
-
-
-                </div>
+                <?php
+                $username = htmlspecialchars($_SESSION['username']);
+                $foto = isset($_SESSION['foto']) ? $_SESSION['foto'] : '';
+                $initial = strtoupper(substr($username, 0, 1));
+                ?>
+                <a href="profil.php" class="login-btn" style="display: flex; align-items: center; gap: 8px;">
+                    <?php if (!empty($foto)): ?>
+                        <img src="uploads/<?= htmlspecialchars($foto) ?>" alt="Foto Profil" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                    <?php else: ?>
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background-color: #ccc; color: #fff; display: flex; justify-content: center; align-items: center; font-weight: bold;">
+                            <?= $initial ?>
+                        </div>
+                    <?php endif; ?>
+                </a>
+                <a href="logout.php" class="logout-btn" onclick="return confirmLogout()">Logout</a>
+                <script>
+                    function confirmLogout() {
+                        return confirm("Apakah Anda yakin ingin logout?");
+                    }
+                </script>
             <?php else: ?>
                 <a href="login.php" class="login-btn">
                     <i data-feather="user"></i>
                     <span>Login</span>
                 </a>
             <?php endif; ?>
+        </div>
+
+
+        <!-- <a href="logout.php" class="logout-btn" onclick="return confirmLogout()">Logout</a> -->
+
+        <script>
+            function confirmLogout() {
+                return confirm("Apakah Anda yakin ingin logout?");
+            }
+        </script>
+
+
+        </div>
+        <!-- <a href="login.php" class="login-btn">
+            <i data-feather="user"></i>
+            <span>Login</span>
+        </a> -->
 
         </div>
 

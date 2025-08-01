@@ -2,9 +2,10 @@
 session_start();
 if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'admin') {
     header("Location: ../login.php");
-    exit;
+    exit();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

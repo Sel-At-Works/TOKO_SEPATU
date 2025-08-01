@@ -1,39 +1,51 @@
 <?php
 session_start();
 $pesan = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Hardcode admin
-    if ($username === "MARSELSHOES23" && $password === "123") {
-        $_SESSION['login'] = true;
-        $_SESSION['role'] = 'admin';
-        $_SESSION['username'] = $username;
-        header("Location: admin/admin_dashboard.php");
-        exit;
-    }
-
-    // Cek member di database
+    // Koneksi ke database
     $koneksi = mysqli_connect("localhost", "root", "", "toko_sepatu");
-    $username_db = mysqli_real_escape_string($koneksi, $username);
-    $password_db = mysqli_real_escape_string($koneksi, $password);
 
-    $sql_member = "SELECT * FROM member WHERE username='$username_db'";
-    $result_member = mysqli_query($koneksi, $sql_member);
-    if ($row_member = mysqli_fetch_assoc($result_member)) {
-        if (password_verify($password_db, $row_member['password'])) {
+    // 1. Cek di tabel admin
+    $query_admin = mysqli_query($koneksi, "SELECT * FROM admin WHERE username = '$username'");
+    if (mysqli_num_rows($query_admin) > 0) {
+        $admin = mysqli_fetch_assoc($query_admin);
+        
+        // Jika password cocok (bisa langsung atau pakai password_verify)
+        if ($password === $admin['password']) {
             $_SESSION['login'] = true;
-            $_SESSION['role'] = 'member';
-            $_SESSION['username'] = $row_member['username'];
-            header("Location: index.php");
-            exit;
+            $_SESSION['role'] = 'admin';
+            $_SESSION['username'] = $admin['username'];
+            header("Location: admin/admin_dashboard.php");
+            exit();
         }
     }
 
+    // 2. Jika bukan admin, cek tabel member
+    $query_member = mysqli_query($koneksi, "SELECT * FROM member WHERE username = '$username'");
+    if (mysqli_num_rows($query_member) > 0) {
+        $member = mysqli_fetch_assoc($query_member);
+
+        // Jika password cocok (gunakan password_verify jika hash)
+      if (password_verify($password, $member['password'])) {
+    $_SESSION['login'] = true;
+    $_SESSION['role'] = 'member';
+    $_SESSION['username'] = $member['username'];
+    $_SESSION['foto'] = $member['foto']; // ✅ tambahkan ini
+    header("Location: index.php");
+    exit();
+}
+
+    }
+
+    // Jika tidak cocok di keduanya
     $pesan = "<div class='login-error'>Username atau password salah!</div>";
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
