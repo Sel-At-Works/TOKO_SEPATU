@@ -6,33 +6,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = mysqli_real_escape_string($koneksi, $_POST['password']);
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-    // Cek apakah username sudah terdaftar
-    $cek = mysqli_query($koneksi, "SELECT * FROM member WHERE username='$username'");
-    if(mysqli_num_rows($cek) > 0){
-        $pesan = "<div class='signup-error'>Username sudah terdaftar!</div>";
-    } else {
-        // Upload foto
-        $foto = $_FILES['foto']['name'];
-        $tmp = $_FILES['foto']['tmp_name'];
-        $folder = "img/member/";
-        if (!is_dir($folder)) {
-            mkdir($folder, 0777, true);
-        }
-        $foto_baru = uniqid() . '_' . basename($foto);
-        $path = $folder . $foto_baru;
-
-        if (move_uploaded_file($tmp, $path)) {
-            $sql = "INSERT INTO member (username, password, foto) VALUES ('$username', '$password_hash', '$foto_baru')";
-            if (mysqli_query($koneksi, $sql)) {
-                $pesan = "<div class='signup-success'>Akun berhasil dibuat! <a href='login.php'>Login di sini</a></div>";
-            } else {
-                $pesan = "<div class='signup-error'>Gagal menyimpan ke database!</div>";
-            }
-        } else {
-            $pesan = "<div class='signup-error'>Upload foto gagal!</div>";
-        }
-    }
+   $sql = "INSERT INTO member (username, password) VALUES ('$username', '$password_hash')";
+if (mysqli_query($koneksi, $sql)) {
+    $pesan = "<div class='signup-success'>Akun berhasil dibuat! <a href='login.php'>Login di sini</a></div>";
+} else {
+    $pesan = "<div class='signup-error'>Gagal menyimpan ke database!</div>";
 }
+
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -174,9 +155,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       <label for="password">Password</label>
       <input type="password" id="password" name="password" required>
-
+<!-- 
       <label for="foto">Foto</label>
-      <input type="file" id="foto" name="foto" accept="image/*" required>
+      <input type="file" id="foto" name="foto" accept="image/*" required> -->
 
       <button type="submit">Sign Up</button>
     </form>

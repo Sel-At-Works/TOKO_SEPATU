@@ -4,6 +4,14 @@ session_start();
 // Koneksi ke database
 $koneksi = mysqli_connect("localhost", "root", "", "toko_sepatu");
 
+//Update jumlah di session sebelum checkout
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_jumlah'])) {
+    foreach ($_POST['jumlah'] as $index => $jumlah) {
+        $_SESSION['keranjang'][$index]['jumlah'] = max(1, intval($jumlah));
+    }
+}
+
+
 // Tambahkan ke keranjang jika ada POST dari detail.php
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_produk'])) {
   $id_produk = intval($_POST['id_produk']);
@@ -151,7 +159,7 @@ $keranjang = $_SESSION['keranjang'] ?? [];
 
 
   <?php if (!empty($keranjang)): ?>
-    <form method="POST">
+  <form method="POST" action="checkout.php" id="keranjangForm">
       <?php
         $total_harga = 0;
         foreach ($keranjang as $index => $item):
@@ -171,9 +179,15 @@ $keranjang = $_SESSION['keranjang'] ?? [];
           </div>
           <a href="?hapus=<?php echo $index; ?>" class="hapus-btn">Hapus</a>
         </div>
+         <!-- ✅ Hidden inputs -->
+    <input type="hidden" name="id_produk[]" value="<?php echo $item['id_produk']; ?>" data-index="<?php echo $index; ?>">
+    <input type="hidden" name="nama[]" value="<?php echo htmlspecialchars($item['nama']); ?>" data-index="<?php echo $index; ?>">
+    <input type="hidden" name="harga[]" value="<?php echo $item['harga']; ?>" data-index="<?php echo $index; ?>">
+    <input type="hidden" name="jumlah_hidden[]" value="<?php echo $item['jumlah']; ?>" data-index="<?php echo $index; ?>">
+  </div>
       <?php endforeach; ?>
      <div class="total">Total: <span id="totalHarga">Rp.0</span></div>
-      <button type="submit" name="update_jumlah" class="checkout-btn">Perbarui Jumlah</button>
+      <button type="submit" class="checkout-btn">Lanjutkan Transaksi</button>
     </form>
   <?php else: ?>
     <p style="text-align: center;">Keranjang kamu masih kosong.</p>
@@ -192,8 +206,7 @@ $keranjang = $_SESSION['keranjang'] ?? [];
 
   <?php endif; ?>
 
-  <!-- javascripst untuk checkbox -->
-   <script>
+  <!-- javascripst untuk checkbox --><script>
   function updateTotal() {
     let total = 0;
     document.querySelectorAll('.checkbox-item').forEach(cb => {
@@ -201,8 +214,6 @@ $keranjang = $_SESSION['keranjang'] ?? [];
         total += parseInt(cb.dataset.subtotal);
       }
     });
-
-    // Format total jadi Rupiah
     document.getElementById('totalHarga').innerText = formatRupiah(total);
   }
 
@@ -210,14 +221,49 @@ $keranjang = $_SESSION['keranjang'] ?? [];
     return 'Rp.' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
 
-  // Jalankan saat halaman dibuka & checkbox diklik
+  // Update subtotal & total saat quantity berubah
+  function updateSubtotal(index, harga) {
+    let qtyInput = document.querySelector(`input[name="jumlah[${index}]"]`);
+    let newQty = parseInt(qtyInput.value);
+    if (isNaN(newQty) || newQty < 1) newQty = 1;
+
+    // Hitung subtotal baru
+    let newSubtotal = newQty * harga;
+
+    // Update tampilan subtotal di UI
+    let subtotalElement = qtyInput.closest('.item-info').querySelector('p:last-child');
+    subtotalElement.innerText = 'Subtotal: ' + formatRupiah(newSubtotal);
+
+    // Update dataset checkbox
+    let checkbox = document.querySelector(`.checkbox-item[value="${index}"]`);
+    checkbox.dataset.subtotal = newSubtotal;
+
+    // Update total keseluruhan
+    updateTotal();
+  }
+
+  // Event untuk checkbox
   document.querySelectorAll('.checkbox-item').forEach(cb => {
     cb.addEventListener('change', updateTotal);
   });
 
+  // Event untuk quantity
+  document.querySelectorAll('input[type="number"]').forEach((input, i) => {
+    let harga = parseInt(input.closest('.item-info').querySelector('p').innerText.replace(/\D/g, '')); 
+    input.addEventListener('input', function() {
+      updateSubtotal(i, harga);
+    });
+  });
+
   // Jalankan pertama kali saat halaman dimuat
   updateTotal();
-</script>
+  document.getElementById('keranjangForm').addEventListener('submit', function() {
+    document.querySelectorAll('input[name^="jumlah["]').forEach(input => {
+        let index = input.name.match(/\d+/)[0]; // Ambil index
+        document.querySelector(`input[name="jumlah_hidden[]"][data-index="${index}"]`).value = input.value;
+    });
+});
 
+</script>
 </body>
 </html>

@@ -17,176 +17,216 @@ $user = mysqli_fetch_assoc($query);
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = $_POST['email'];
     $profile = $_POST['profile'];
+    $no_hp = $_POST['no_hp'];
+
 
     // Upload foto jika ada
     $foto = $user['foto']; // default tetap yang lama
-    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
-        $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
-        $newName = "foto_" . time() . "." . $ext;
-    $email = $_POST['email'];
-    $profile = $_POST['profile'];
-
-    // ✅ Tambahkan di sini
     if (!is_dir('uploads')) {
         mkdir('uploads', 0777, true);
     }
 
-    // Upload foto jika ada
-    $foto = $user['foto']; // default tetap yang lama
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
         $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
         $newName = "foto_" . time() . "." . $ext;
-        move_uploaded_file($_FILES['foto']['tmp_name'], "uploads/" . $newName);
-        $foto = $newName;
-    }
-
         move_uploaded_file($_FILES['foto']['tmp_name'], "uploads/" . $newName);
         $foto = $newName;
     }
 
     // Update data ke database
-    $update = mysqli_query($koneksi, "UPDATE member SET email = '$email', profile = '$profile', foto = '$foto' WHERE username = '$username'");
-if ($update) {
-    $_SESSION['foto'] = $foto; // <--- tambahkan baris ini untuk update session foto
-    header("Location: profil.php?success=1");
-    exit;
-}
+   $update = mysqli_query($koneksi, "UPDATE member 
+    SET email = '$email', 
+        no_hp = '$no_hp', 
+        profile = '$profile', 
+        foto = '$foto' 
+    WHERE username = '$username'");
 
+    if ($update) {
+        $_SESSION['foto'] = $foto;
+        header("Location: profil.php?success=1");
+        exit;
+    }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <title>Profil Saya</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f7f9fc;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .profil-container {
+            background-color: #fff;
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+            max-width: 900px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .profil-photo {
+            flex: 1;
+            text-align: center;
+        }
+
+        .profil-photo img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 3px solid #eee;
+        }
+
+        .profil-photo p {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .profil-form {
+            flex: 2;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 14px;
+            color: #444;
+        }
+
+        input[type="email"],
+        input[type="file"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
+
+        textarea {
+            resize: none;
+            height: 100px;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
+            outline: none;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #43a047;
+        }
+
+        .success-msg {
+            color: green;
+            margin-top: 10px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #4CAF50;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .profil-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profil-photo img {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="profil-box">
-        <h2>Profil Pengguna</h2>
-
-        <!-- Tampilkan Foto Profil -->
-        <?php if (!empty($user['foto'])): ?>
-            <img src="uploads/<?= htmlspecialchars($user['foto']) ?>" alt="Foto Profil" width="150" style="border-radius: 10px;"><br>
-        <?php else: ?>
-            <p><i>Belum ada foto profil.</i></p>
-        <?php endif; ?>
-
-        <!-- Tampilkan Username -->
-        <p><strong>Username:</strong> <?= htmlspecialchars($user['username']) ?></p>
-
-        <form method="post" enctype="multipart/form-data">
-            <label>Email:</label><br>
-            <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required><br><br>
-
-            <label>Profil / Deskripsi:</label><br>
-            <textarea name="profile" rows="4"><?= htmlspecialchars($user['profile']) ?></textarea><br><br>
-
-            <label>Foto Profil (jpg/png):</label><br>
-            <input type="file" name="foto" accept="image/*"><br><br>
-
-            <button type="submit">Simpan Perubahan</button>
-        </form>
-
-        <?php if (isset($_GET['success'])): ?>
-            <p style="color: green;">Profil berhasil diperbarui!</p>
-        <?php endif; ?>
-
-        <a href="index.php">Kembali ke Beranda</a>
+    <div class="profil-container">
+        <div class="profil-photo">
+            <?php if (!empty($user['foto'])): ?>
+                <img src="uploads/<?= htmlspecialchars($user['foto']) ?>" alt="Foto Profil">
+            <?php else: ?>
+                <img src="https://via.placeholder.com/200" alt="Foto Default">
+                <p><i>Belum ada foto profil</i></p>
+            <?php endif; ?>
+            <p><strong><?= htmlspecialchars($user['username']) ?></strong></p>
+        </div>
+        <div class="profil-form">
+            <h2>Edit Profil</h2>
+            <form method="post" enctype="multipart/form-data">
+                <div>
+                    <label>Email:</label>
+                    <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required>
+                </div>
+                <div>
+                    <label>No Telepon</label>
+                  <input type="text" name="no_hp" value="<?= htmlspecialchars($user['no_hp']) ?>" required>
+                </div>
+                <div>
+                    <label for="alamat">Alamat:</label>
+                    <textarea id="alamat" name="profile" placeholder="Masukkan alamat lengkap Anda"><?= htmlspecialchars($user['profile']) ?></textarea>
+                </div>
+                <div>
+                    <label>Foto Profil (jpg/png):</label>
+                    <input type="file" name="foto" accept="image/*">
+                </div>
+                <button type="submit">Simpan Perubahan</button>
+            </form>
+            <?php if (isset($_GET['success'])): ?>
+                <p class="success-msg">Profil berhasil diperbarui!</p>
+            <?php endif; ?>
+            <a href="index.php" class="back-link">← Kembali ke Beranda</a>
+        </div>
     </div>
 </body>
-
 </html>
-
-
-<style>
-    body {
-        font-family: 'Segoe UI', sans-serif;
-        background-color: #f0f2f5;
-        padding: 40px;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        min-height: 100vh;
-    }
-
-    .profil-box {
-        background-color: #fff;
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        max-width: 500px;
-    }
-
-    h2 {
-        text-align: center;
-        margin-bottom: 20px;
-        color: #333;
-    }
-
-    form {
-        margin-top: 20px;
-    }
-
-    label {
-        font-weight: 600;
-        display: block;
-        margin-top: 15px;
-    }
-
-    input[type="email"],
-    input[type="file"],
-    textarea {
-        width: 100%;
-        padding: 10px;
-        margin-top: 5px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        box-sizing: border-box;
-    }
-
-    button {
-        margin-top: 20px;
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px 16px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 16px;
-        width: 100%;
-    }
-
-    button:hover {
-        background-color: #45a049;
-    }
-
-    img {
-        display: block;
-        margin: 0 auto 20px auto;
-        border: 2px solid #ddd;
-        padding: 5px;
-        background-color: #fff;
-        border-radius: 10px;
-        max-width: 150px;
-    }
-
-    p {
-        margin-top: 10px;
-        text-align: center;
-    }
-
-    a {
-        display: block;
-        text-align: center;
-        margin-top: 20px;
-        text-decoration: none;
-        color: #4CAF50;
-        font-weight: bold;
-    }
-
-    a:hover {
-        text-decoration: underline;
-    }
-</style>

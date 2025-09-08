@@ -35,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION['role'] = 'member';
     $_SESSION['username'] = $member['username'];
     $_SESSION['foto'] = $member['foto']; // ✅ tambahkan ini
+     $_SESSION['id_member'] = $member['id_member']; // ✅ Tambahkan ini
     header("Location: index.php");
     exit();
 }
